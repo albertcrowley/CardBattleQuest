@@ -5,10 +5,20 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import javax.swing.ViewportLayout;
+import net.bwnj.cardbattle.Engine.Card;
+import net.bwnj.cardbattle.Engine.CardArchitype;
+
+// assets?
+// https://www.artstation.com/artwork/o4Yn4
+// https://graphicriver.net/item/creature-cards/20788252
+// https://www.artstation.com/artwork/o4Yn4
+
 
 class GameScreen implements Screen {
 
@@ -18,9 +28,17 @@ class GameScreen implements Screen {
     private SpriteBatch batch;
     private Texture background;
 
-    private int backgroundOffest;
+    private float backgroundOffest;
     private final int WORLD_WIDTH = 72;
     private final int WORLD_HEIGHT = 128;
+
+    private TextureAtlas textureAtlas;
+    private TextureRegion bot, shark, squirel;
+
+    float card_width = 5.75F * 2F;
+    float card_height = 7.5F * 2F;
+
+    Card card;
 
     GameScreen() {
         camera = new OrthographicCamera();
@@ -28,7 +46,15 @@ class GameScreen implements Screen {
         background = new Texture("darkPurpleStarscape.png");
         backgroundOffest = 0;
 
+        // setup texture atlas
+        textureAtlas = new TextureAtlas("packs/monsters.atlas");
+        bot = textureAtlas.findRegion("bot");
+
+
         batch = new SpriteBatch();
+
+        CardArchitype ca = new CardArchitype("bot", bot, "monster",1,1,1 );
+        card = new Card(ca);
     }
 
     @Override
@@ -37,14 +63,32 @@ class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        batch.begin();
-        backgroundOffest ++;
-        if (backgroundOffest % WORLD_HEIGHT == 0) {
-            backgroundOffest = 0;
+        try {
+            ShapeRenderer sr = new ShapeRenderer();
+            sr.setProjectionMatrix(this.viewport.getCamera().combined);
+
+            batch.begin();
+            backgroundOffest += delta;
+            if (backgroundOffest % WORLD_HEIGHT == 0) {
+                backgroundOffest = 0;
+            }
+            batch.draw(background, 0,-backgroundOffest, WORLD_WIDTH, WORLD_HEIGHT);
+            batch.draw(background, 0,-backgroundOffest+WORLD_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
+
+
+            // draw a card
+            card.x = 10;
+            card.y = 50;
+            card.render(batch, sr);
+
+            batch.end();
+            sr.end();
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        batch.draw(background, 0,-backgroundOffest, WORLD_WIDTH, WORLD_HEIGHT);
-        batch.draw(background, 0,-backgroundOffest+WORLD_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
-        batch.end();
+
+
     }
 
     @Override
