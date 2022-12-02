@@ -1,0 +1,104 @@
+
+diff_robots.png
+size: 4096, 2048
+format: RGBA8888
+filter: Nearest, Nearest
+repeat: none
+unicorn
+  rotate: false
+  xy: 1544, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+star
+  rotate: false
+  xy: 1030, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+sunburst
+  rotate: false
+  xy: 516, 516
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+owl
+  rotate: false
+  xy: 1544, 1030
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+dog
+  rotate: false
+  xy: 2, 516
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+cat
+  rotate: false
+  xy: 516, 1030
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+frog
+  rotate: false
+  xy: 2, 1030
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+unicorn
+  rotate: false
+  xy: 516, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+chicken
+  rotate: false
+  xy: 2058, 1030
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+king
+  rotate: false
+  xy: 1030, 1030
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+squirrel
+  rotate: false
+  xy: 1544, 516
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+king
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+robot
+  rotate: false
+  xy: 1030, 516
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+shark
+  rotate: false
+  xy: 2058, 516
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1

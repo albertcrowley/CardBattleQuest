@@ -1,16 +1,5 @@
 package net.bwnj.kingdomquest;
 
-import static java.lang.System.exit;
-
-import net.bwnj.cardbattle.Engine.DeckBuilder;
-import net.bwnj.cardbattle.Engine.Game;
-import net.bwnj.cardbattle.Engine.Location;
-
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
-
 public class RandoCLI {
 //
 //    static Game game;

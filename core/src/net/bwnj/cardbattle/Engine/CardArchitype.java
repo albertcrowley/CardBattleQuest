@@ -1,5 +1,6 @@
 package net.bwnj.cardbattle.Engine;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CardArchitype {
@@ -9,12 +10,30 @@ public class CardArchitype {
     public Integer Toughness;
     public String Suit = "";
     public TextureRegion Texture;
-    public float draw_width = 5.75F * 4;
-    public float draw_height = 7.5F * 4;
+    public float draw_width = 15F;
+    public float draw_height = 15F;
+
+    public float card_frame_widht = 969F;
+    public float card_frame_height = 1352F;
+    public float card_ratio = card_frame_widht / card_frame_height;
+    public float card_art_x = 82F/card_frame_height;
+    public float card_art_y = 602F/ card_frame_height;
+    public float card_art_width = (890-82) / card_frame_height;
+    public float card_art_height = (1196-602) / card_frame_height;
+    public float card_text_x = 200F/card_frame_height;
+    public float card_text_y = 425F/card_frame_height;
+    public float card_name_x = .07F ;
+    public float card_name_y = .935F ;
+    public com.badlogic.gdx.graphics.Texture frameTexture;
+
+    void initGraphics() {
+        frameTexture = new Texture("card-frame.png");
+    }
 
     public CardArchitype(String name) {
         this.Name = name;
         this.Cost = 0;
+        initGraphics();
     }
     public CardArchitype(String name, String suit, int cost, int power, int toughness) {
         Name = name;
@@ -22,6 +41,7 @@ public class CardArchitype {
         Cost = cost;
         Power = power;
         Toughness = toughness;
+        initGraphics();
     }
 
     public CardArchitype(String name, TextureRegion texture, String suit, int cost, int power, int toughness) {
@@ -31,6 +51,7 @@ public class CardArchitype {
         Cost = cost;
         Power = power;
         Toughness = toughness;
+        initGraphics();
     }
 
     public String toString() {

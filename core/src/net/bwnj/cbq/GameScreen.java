@@ -29,8 +29,8 @@ class GameScreen implements Screen {
     private Texture background;
 
     private float backgroundOffest;
-    private final int WORLD_WIDTH = 72;
-    private final int WORLD_HEIGHT = 128;
+    private final int WORLD_WIDTH = 720;
+    private final int WORLD_HEIGHT = 1280;
 
     private TextureAtlas textureAtlas;
     private TextureRegion bot, shark, squirel;
@@ -47,13 +47,13 @@ class GameScreen implements Screen {
         backgroundOffest = 0;
 
         // setup texture atlas
-        textureAtlas = new TextureAtlas("packs/monsters.atlas");
-        bot = textureAtlas.findRegion("bot");
+        textureAtlas = new TextureAtlas("packs/diff_robots.atlas");
+        bot = textureAtlas.findRegion("owl");
 
 
         batch = new SpriteBatch();
 
-        CardArchitype ca = new CardArchitype("bot", bot, "monster",1,1,1 );
+        CardArchitype ca = new CardArchitype("owl", bot, "monster",1,1,1 );
         card = new Card(ca);
     }
 
@@ -63,8 +63,8 @@ class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        ShapeRenderer sr = new ShapeRenderer();
         try {
-            ShapeRenderer sr = new ShapeRenderer();
             sr.setProjectionMatrix(this.viewport.getCamera().combined);
 
             batch.begin();
@@ -79,13 +79,14 @@ class GameScreen implements Screen {
             // draw a card
             card.x = 10;
             card.y = 50;
-            card.render(batch, sr);
+            card.render(batch, sr, 300,600, 200);
 
-            batch.end();
-            sr.end();
 
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            batch.end();
+            sr.end();
         }
 
 

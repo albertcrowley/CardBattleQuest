@@ -10,7 +10,7 @@ public class DesktopLauncher {
 		Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
 		config.setForegroundFPS(60);
 		config.setTitle("CardBattleQuest");
-		config.setWindowedMode(360, 640);
+		config.setWindowedMode(720, 1280);
 		new Lwjgl3Application(new CardBattleQuest(), config);
 	}
 }
