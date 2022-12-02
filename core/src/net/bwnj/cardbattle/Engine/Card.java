@@ -58,7 +58,7 @@ public class Card {
         BitmapFont namefont = fontGenerator.generateFont(fontParameter);
 
         bodyfont.draw(batch, "Power: " + Architype.Power, x + Architype.card_text_x * height, y + Architype.card_text_y * height);
-        bodyfont.draw(batch, "Health:  " + Architype.Toughness, x + Architype.card_text_x * height, y + Architype.card_text_y * height - bodyfont.getData().capHeight * 1.5F );
+        bodyfont.draw(batch, "Health: " + Architype.Toughness, x + Architype.card_text_x * height, y + Architype.card_text_y * height - bodyfont.getData().capHeight * 1.5F );
         namefont.draw(batch, Architype.Name, x + Architype.card_name_x * height, y + Architype.card_name_y * height);
 
         fontGenerator.dispose();

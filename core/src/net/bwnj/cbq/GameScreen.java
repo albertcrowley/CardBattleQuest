@@ -53,7 +53,7 @@ class GameScreen implements Screen {
 
         batch = new SpriteBatch();
 
-        CardArchitype ca = new CardArchitype("owl", bot, "monster",1,1,1 );
+        CardArchitype ca = new CardArchitype("owl", bot, "monster",1,2,3 );
         card = new Card(ca);
     }
 
