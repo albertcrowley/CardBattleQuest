@@ -22,7 +22,7 @@ public class DeckBuilder {
 
     static CardArchitype architypeHelper(String name, int power) {
         CardArchitype ca = new CardArchitype(name);
-        ca.Power = power;
+        ca.power = power;
         return ca;
     }
 
@@ -68,9 +68,9 @@ public class DeckBuilder {
                     for (int j = 0; j < cards.size(); j++) {
                         JsonNode card = cards.get(j);
                         CardArchitype ca = new CardArchitype(card.get("name").textValue());
-                        ca.Power = card.get("power").intValue();
-                        ca.Toughness = card.get("toughness").intValue();
-                        ca.Cost = card.get("cost").intValue();
+                        ca.power = card.get("power").intValue();
+                        ca.toughness = card.get("toughness").intValue();
+                        ca.cost = card.get("cost").intValue();
                         for (int c=0; c < card.get("count").intValue(); c++) {
                             cardSet.add(new Card(ca));
                         }
@@ -93,7 +93,7 @@ public class DeckBuilder {
             cardSet.add(new Card(architypeHelper("Jack of " + suit, 11)));
             for (int i = 2; i <= 10; i++) {
                 CardArchitype ca = new CardArchitype(i + " of " + suit);
-                ca.Power = i;
+                ca.power = i;
                 cardSet.add(new Card(ca));
             }
         }

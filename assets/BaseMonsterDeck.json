@@ -1,0 +1,23 @@
+{
+  "decks": [
+    {
+      "name" : "BaseMonsterDeck",
+      "cards" : [
+        {
+          "name": "Goblin",
+          "cost" : 1,
+          "power" : 3,
+          "toughness": 3,
+          "count": 5
+        },
+        {
+          "name": "Troll",
+          "cost" : 1,
+          "power" : 2,
+          "toughness": 8,
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

@@ -4,12 +4,12 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CardArchitype {
-    public String Name;
-    public Integer Cost;
-    public Integer Power;
-    public Integer Toughness;
-    public String Suit = "";
-    public TextureRegion Texture;
+    public String name;
+    public Integer cost;
+    public Integer power;
+    public Integer toughness;
+    public String suit = "";
+    public TextureRegion art;
     public float draw_width = 15F;
     public float draw_height = 15F;
 
@@ -28,35 +28,38 @@ public class CardArchitype {
 
     void initGraphics() {
         frameTexture = new Texture("card-frame.png");
+        if (art == null) {
+            art = new TextureRegion(new Texture("default-art.png"));
+        }
     }
 
-    public CardArchitype(String name) {
-        this.Name = name;
-        this.Cost = 0;
+    public CardArchitype(String _name) {
+        this.name = _name;
+        this.cost = 0;
         initGraphics();
     }
-    public CardArchitype(String name, String suit, int cost, int power, int toughness) {
-        Name = name;
-        Suit = suit;
-        Cost = cost;
-        Power = power;
-        Toughness = toughness;
+    public CardArchitype(String _name, String _suit, int _cost, int _power, int _toughness) {
+        name = _name;
+        suit = _suit;
+        cost = _cost;
+        power = _power;
+        toughness = _toughness;
         initGraphics();
     }
 
-    public CardArchitype(String name, TextureRegion texture, String suit, int cost, int power, int toughness) {
-        Name = name;
-        Texture = texture;
-        Suit = suit;
-        Cost = cost;
-        Power = power;
-        Toughness = toughness;
+    public CardArchitype(String _name, TextureRegion _art, String _suit, int _cost, int _power, int _toughness) {
+        name = _name;
+        this.art = _art;
+        suit = _suit;
+        cost = _cost;
+        power = _power;
+        toughness = _toughness;
         initGraphics();
     }
 
     public String toString() {
 //        return "%s [ (%d) %d/%d ]".formatted(Name, Cost, Power, Toughness);   // Name + " [" + Cost + "]";
-        return String.join(" ", new String[] {Name, String.valueOf(Cost), Power.toString(), Toughness.toString()});
+        return String.join(" ", new String[] {name, String.valueOf(cost), power.toString(), toughness.toString()});
     }
 
 
