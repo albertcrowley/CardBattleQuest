@@ -4,10 +4,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Card {
 
     public float x, y;
+    public float height, width;
+    public boolean onScreen = false;
 
     public CardArchitype Architype;
     public String Format = "$n [ $p/$t ]\n";
@@ -27,6 +30,7 @@ public class Card {
             sb.append(cardstring);
         return sb.toString();
     }
+
     String defaultStr(Object o, String def) {
         if (o == null) {
             return def;
@@ -34,10 +38,21 @@ public class Card {
         return o.toString();
     }
 
+    public void setPos(float _x, float _y, float _height) {
+        x = _x;
+        y = _y;
+        height = _height;
+        width = height * Architype.card_ratio;
+        onScreen = true;
+    }
 
-    public void render(SpriteBatch batch, ShapeRenderer sr, BitmapFont nameFont, BitmapFont bodyFont, float x, float y, float height) {
+    public Rectangle getBoundingRectangle() {
+        if (!onScreen) { return null; }
 
+        return new Rectangle(x,y,width,height);
+    }
 
+    public void render(SpriteBatch batch, ShapeRenderer sr, BitmapFont nameFont, BitmapFont bodyFont) {
         try {
             batch.draw(Architype.frameTexture, x,y, height * Architype.card_ratio, height);
             batch.draw(Architype.art, x + Architype.card_art_x * height ,y + Architype.card_art_y * height, Architype.card_art_width * height, Architype.card_art_height * height);

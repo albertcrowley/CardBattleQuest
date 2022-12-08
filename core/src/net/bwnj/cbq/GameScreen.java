@@ -18,7 +18,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import net.bwnj.cardbattle.Engine.Card;
 import net.bwnj.cardbattle.Engine.CardArchitype;
 import net.bwnj.cardbattle.Engine.Game;
-import net.bwnj.cardbattle.Engine.Location;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +28,7 @@ import java.util.Map;
 // https://www.artstation.com/artwork/o4Yn4
 
 
-class GameScreen implements Screen {
+class GameScreen implements Screen, InputListener {
 
     public static Camera camera;
     private Viewport viewport;
@@ -48,13 +47,15 @@ class GameScreen implements Screen {
     float card_height = 150F;
 
     Game game = null;
+    BattleInputProcessor inputProcessor = null;
 
     Map<Float, Map<String, BitmapFont>> fontCache = new HashMap<Float, Map<String, BitmapFont>>();
 
     Card card;
 
-    GameScreen(Game _game) {
+    GameScreen(Game _game, BattleInputProcessor _bip) {
         game = _game;
+        inputProcessor = _bip;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
         background = new Texture("darkPurpleStarscape.png");
@@ -72,12 +73,24 @@ class GameScreen implements Screen {
 
     }
 
-    public void initBattle() {
-        Location l = game.get("monsterDeck");
-        game.get("monsterDeck").Cards.shuffle();
-        game.get("playerDeck").Cards.shuffle();
+    public void setupInputProcessor() {
+        for (Card c : game.get(CardBattleQuest.PLAYER_DECK).Cards) {
+            inputProcessor.addCard(c);
+        }
+        for (Card c : game.get(CardBattleQuest.MONSTER_DECK).Cards) {
+            inputProcessor.addCard(c);
+        }
+//        for (Card c : game.get(CardBattleQuest.PLAYER_HAND).Cards) {
+//            inputProcessor.addCard(c);
+//        }
+        inputProcessor.addListener(this);
+    }
 
-        game.moveCards(4, "playerDeck", "playerHand");
+    public void initBattle() {
+        setupInputProcessor();
+        game.get(CardBattleQuest.MONSTER_DECK).Cards.shuffle();
+        game.get(CardBattleQuest.PLAYER_DECK).Cards.shuffle();
+        game.moveCards(4, CardBattleQuest.PLAYER_DECK, CardBattleQuest.PLAYER_HAND);
     }
 
     @Override
@@ -113,7 +126,7 @@ class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        System.out.println("delta " + delta + " approx fps " + 1/delta );
+//        System.out.println("delta " + delta + " approx fps " + 1/delta );
         ShapeRenderer sr = new ShapeRenderer();
         try {
             Map<String, BitmapFont> fonts = getCardFonts(card_height);
@@ -133,20 +146,26 @@ class GameScreen implements Screen {
 
             // draw a player hand
 
-            float hand_x = 20;
-            float hand_y = 20;
+            float drawpos_x = 20;
+            float drawpos_y = 20;
             float i = 0;
-            for (Card card : game.get("playerHand").Cards) {
+            for (Card card : game.get(CardBattleQuest.PLAYER_HAND).Cards) {
 //                System.out.println(card.Architype.name);
-                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"), hand_x + (1.5F * i * card_width), hand_y, card_height);
+                card.setPos(drawpos_x + (1.5F * i * card_width), drawpos_y, card_height);
+                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"));
                 i++;
             }
 
-            // draw a card
-            card.x = 10;
-            card.y = 50;
-            card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"), 300,600, 200);
-
+            // draw player field
+            drawpos_x = 20;
+            drawpos_y = 300;
+            i = 0;
+            for (Card card : game.get(CardBattleQuest.PLAYER_FIELD).Cards) {
+//                System.out.println(card.Architype.name);
+                card.setPos(drawpos_x + (1.5F * i * card_width), drawpos_y, card_height);
+                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"));
+                i++;
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,6 +175,20 @@ class GameScreen implements Screen {
         }
 
 
+    }
+
+    @Override
+    public void processClick(Object o) {
+
+        if (o.getClass() == Card.class) {
+            Card c = (Card) o;
+            System.out.println("Got a click on " + c.Architype.name);
+
+            if (game.get(CardBattleQuest.PLAYER_HAND).Cards.contains(c)) {
+                game.get(CardBattleQuest.PLAYER_HAND).Cards.remove(c);
+                game.get(CardBattleQuest.PLAYER_FIELD).Cards.add(c);
+            }
+        }
     }
 
     @Override

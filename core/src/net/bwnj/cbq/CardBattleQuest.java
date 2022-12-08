@@ -17,6 +17,13 @@ public class CardBattleQuest extends Game {
 	BattleInputProcessor inputProcessor;
 	net.bwnj.cardbattle.Engine.Game game;
 
+	public static final String PLAYER_HAND = "playerHand";
+	public static final String MONSTER_HAND = "playerHand";
+	public static final String MONSTER_FIELD = "monsterField";
+	public static final String PLAYER_FIELD = "playerField";
+	public static final String MONSTER_DECK = "monsterDeck";
+	public static final String PLAYER_DECK = "playerDeck";
+
 	@Override
 	public void create() {
 
@@ -28,21 +35,22 @@ public class CardBattleQuest extends Game {
 
 	public void startBattle() {
 		List<Location> locations = Arrays.asList(new Location[]{
-				new Location("monsterDeck", DeckBuilder.getBaseMonsterDeck()),
-				new Location("playerDeck", DeckBuilder.getStandardPlayingCardDeck()),
-				new Location("monsterField", new Pile()),
-				new Location("playerHand", new Pile()),
-				new Location("playerField", new Pile())});
+				new Location(MONSTER_DECK, DeckBuilder.getBaseMonsterDeck()),
+				new Location(MONSTER_FIELD, new Pile()),
+				new Location(PLAYER_DECK, DeckBuilder.getStandardPlayingCardDeck()),
+				new Location(PLAYER_HAND, new Pile()),
+				new Location(PLAYER_FIELD, new Pile())});
 
 
 		game = new net.bwnj.cardbattle.Engine.Game(locations);
 
 
-		gameScreen = new GameScreen(game);
-		gameScreen.initBattle();
-		setScreen(gameScreen);
 		inputProcessor = new BattleInputProcessor();
 		Gdx.input.setInputProcessor(inputProcessor);
+
+		gameScreen = new GameScreen(game, inputProcessor);
+		gameScreen.initBattle();
+		setScreen(gameScreen);
 	}
 
 
