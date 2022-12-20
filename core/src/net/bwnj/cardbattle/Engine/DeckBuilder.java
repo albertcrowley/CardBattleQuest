@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.maximeroussy.invitrode.WordGenerator;
 
+import net.bwnj.cbq.graphics.Card;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;

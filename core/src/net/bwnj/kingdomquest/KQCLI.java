@@ -1,7 +1,7 @@
 package net.bwnj.kingdomquest;
 
 import net.bwnj.cardbattle.Engine.DeckBuilder;
-import net.bwnj.cardbattle.Engine.Game;
+import net.bwnj.cardbattle.Engine.CardBattleGame;
 import net.bwnj.cardbattle.Engine.Location;
 import net.bwnj.cardbattle.Engine.Pile;
 
@@ -11,7 +11,7 @@ import java.util.Scanner;
 
 public class KQCLI {
 
-    static Game game;
+    static CardBattleGame cardBattleGame;
     static Integer score;
     static boolean gameOver = false;
 
@@ -22,19 +22,19 @@ public class KQCLI {
         Location l1 = new Location("hand");
         Location l2 = new Location("drawpile", p);
         Location l3 = new Location("table");
-        KQCLI.game = new Game(List.of(new Location[]{l1, l2, l3}));
+        KQCLI.cardBattleGame = new CardBattleGame(List.of(new Location[]{l1, l2, l3}));
 
-        game.get("drawpile").Cards.shuffle();
-        game.moveCards(5, "drawpile", "hand");
+        cardBattleGame.get("drawpile").Cards.shuffle();
+        cardBattleGame.moveCards(5, "drawpile", "hand");
 
         score = 0;
     }
 
     public static boolean printGameState() {
         System.out.println("Your hand:");
-        System.out.println(game.get("hand"));
+        System.out.println(cardBattleGame.get("hand"));
         System.out.println("\nCards on the table");
-        System.out.println(game.get("table"));
+        System.out.println(cardBattleGame.get("table"));
 
         System.out.println("Your score: " + score);
 
@@ -59,9 +59,9 @@ public class KQCLI {
     static void tick() {
         Integer cardNumber = getInput();
         if (cardNumber != null) {
-            game.moveSpecificCard(cardNumber-1, "hand", "table");
+            cardBattleGame.moveSpecificCard(cardNumber-1, "hand", "table");
             //now draw
-            game.moveCards(1,"drawpile", "hand");
+            cardBattleGame.moveCards(1,"drawpile", "hand");
         }
 
         scoreTheGame();

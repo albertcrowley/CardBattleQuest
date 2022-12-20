@@ -4,14 +4,14 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 
-import net.bwnj.cardbattle.Engine.Card;
+import net.bwnj.cbq.graphics.Card;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class BattleInputProcessor implements InputProcessor {
 
-    List<Card> cards = new ArrayList<Card>();
+    List<Card> cards = new ArrayList<>();
     List<InputListener> inputListeners = new ArrayList<InputListener>();
 
     public void clear() {
@@ -51,13 +51,13 @@ public class BattleInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Vector3 converted = GameScreen.camera.unproject(new Vector3(screenX, screenY, 0));
+        Vector3 converted = OldGameScreen.camera.unproject(new Vector3(screenX, screenY, 0));
 //        System.out.println (System.out.printf("mouse up!!!!: %f,%f            ", converted.x, converted.y));
 
         System.out.println ("Testing cards " + cards.size() );
 
         for (Card c : cards) {
-            Rectangle boundingRec = c.getBoundingRectangle();
+            Rectangle boundingRec = new Rectangle(1,1,2,2); // c.getBoundingRectangle();
             if (boundingRec != null) {
 //                System.out.println ("testing " + converted + " against " + c.getBoundingRectangle());
                 if ( converted.x > boundingRec.x && converted.x < boundingRec.x + boundingRec.width && converted.y > boundingRec.y && converted.y < boundingRec.y + boundingRec.height) {

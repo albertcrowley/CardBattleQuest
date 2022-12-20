@@ -11,13 +11,12 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
-import net.bwnj.cardbattle.Engine.Card;
 import net.bwnj.cardbattle.Engine.CardArchitype;
-import net.bwnj.cardbattle.Engine.Game;
+import net.bwnj.cardbattle.Engine.CardBattleGame;
+import net.bwnj.cbq.graphics.Card;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -28,7 +27,7 @@ import java.util.Map;
 // https://www.artstation.com/artwork/o4Yn4
 
 
-class GameScreen implements Screen, InputListener {
+class OldGameScreen implements Screen, InputListener {
 
     public static Camera camera;
     private Viewport viewport;
@@ -46,15 +45,15 @@ class GameScreen implements Screen, InputListener {
     float card_width = 115F;
     float card_height = 150F;
 
-    Game game = null;
+    CardBattleGame cardBattleGame = null;
     BattleInputProcessor inputProcessor = null;
 
     Map<Float, Map<String, BitmapFont>> fontCache = new HashMap<Float, Map<String, BitmapFont>>();
 
     Card card;
 
-    GameScreen(Game _game, BattleInputProcessor _bip) {
-        game = _game;
+    OldGameScreen(CardBattleGame _CardBattle_game, BattleInputProcessor _bip) {
+        cardBattleGame = _CardBattle_game;
         inputProcessor = _bip;
         camera = new OrthographicCamera();
         viewport = new StretchViewport(WORLD_WIDTH, WORLD_HEIGHT, camera);
@@ -74,10 +73,10 @@ class GameScreen implements Screen, InputListener {
     }
 
     public void setupInputProcessor() {
-        for (Card c : game.get(CardBattleQuest.PLAYER_DECK).Cards) {
+        for (Card c : cardBattleGame.get(CardBattleQuest.PLAYER_DECK).Cards) {
             inputProcessor.addCard(c);
         }
-        for (Card c : game.get(CardBattleQuest.MONSTER_DECK).Cards) {
+        for (Card c : cardBattleGame.get(CardBattleQuest.MONSTER_DECK).Cards) {
             inputProcessor.addCard(c);
         }
 //        for (Card c : game.get(CardBattleQuest.PLAYER_HAND).Cards) {
@@ -88,9 +87,10 @@ class GameScreen implements Screen, InputListener {
 
     public void initBattle() {
         setupInputProcessor();
-        game.get(CardBattleQuest.MONSTER_DECK).Cards.shuffle();
-        game.get(CardBattleQuest.PLAYER_DECK).Cards.shuffle();
-        game.moveCards(4, CardBattleQuest.PLAYER_DECK, CardBattleQuest.PLAYER_HAND);
+        cardBattleGame.get(CardBattleQuest.MONSTER_DECK).Cards.shuffle();
+        cardBattleGame.get(CardBattleQuest.PLAYER_DECK).Cards.shuffle();
+        cardBattleGame.moveCards(4, CardBattleQuest.PLAYER_DECK, CardBattleQuest.PLAYER_HAND);
+        layoutPlayerHand();
     }
 
     @Override
@@ -124,57 +124,54 @@ class GameScreen implements Screen, InputListener {
         return fonts;
     }
 
+    public void layoutPlayerHand() {
+        float drawpos_x = 20;
+        float drawpos_y = 20;
+        float i = 0;
+        for (Card card : cardBattleGame.get(CardBattleQuest.PLAYER_HAND).Cards) {
+//            card.setPos(drawpos_x + (1.5F * i * card_width), drawpos_y, card_height);
+            i++;
+        }
+    }
+
     @Override
     public void render(float delta) {
-//        System.out.println("delta " + delta + " approx fps " + 1/delta );
-        ShapeRenderer sr = new ShapeRenderer();
-        try {
-            Map<String, BitmapFont> fonts = getCardFonts(card_height);
-
-            sr.setProjectionMatrix(this.viewport.getCamera().combined);
-            sr.begin(ShapeRenderer.ShapeType.Line);
-
-
-            batch.begin();
-            backgroundOffest += delta;
-            if (backgroundOffest % WORLD_HEIGHT == 0) {
-                backgroundOffest = 0;
-            }
-            batch.draw(background, 0,-backgroundOffest, WORLD_WIDTH, WORLD_HEIGHT);
-            batch.draw(background, 0,-backgroundOffest+WORLD_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
-
-
-            // draw a player hand
-
-            float drawpos_x = 20;
-            float drawpos_y = 20;
-            float i = 0;
-            for (Card card : game.get(CardBattleQuest.PLAYER_HAND).Cards) {
-//                System.out.println(card.Architype.name);
-                card.setPos(drawpos_x + (1.5F * i * card_width), drawpos_y, card_height);
-                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"));
-                i++;
-            }
-
-            // draw player field
-            drawpos_x = 20;
-            drawpos_y = 300;
-            i = 0;
-            for (Card card : game.get(CardBattleQuest.PLAYER_FIELD).Cards) {
-//                System.out.println(card.Architype.name);
-                card.setPos(drawpos_x + (1.5F * i * card_width), drawpos_y, card_height);
-                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"));
-                i++;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            batch.end();
-            sr.end();
-        }
-
-
+////        System.out.println("delta " + delta + " approx fps " + 1/delta );
+//        ShapeRenderer sr = new ShapeRenderer();
+//        try {
+//            Map<String, BitmapFont> fonts = getCardFonts(card_height);
+//
+//            sr.setProjectionMatrix(this.viewport.getCamera().combined);
+//            sr.begin(ShapeRenderer.ShapeType.Line);
+//
+//
+//            batch.begin();
+//            backgroundOffest += delta;
+//            if (backgroundOffest % WORLD_HEIGHT == 0) {
+//                backgroundOffest = 0;
+//            }
+//            batch.draw(background, 0,-backgroundOffest, WORLD_WIDTH, WORLD_HEIGHT);
+//            batch.draw(background, 0,-backgroundOffest+WORLD_HEIGHT, WORLD_WIDTH, WORLD_HEIGHT);
+//
+//
+//            // draw a player hand
+//            for (Card card : cardBattleGame.get(CardBattleQuest.PLAYER_HAND).Cards) {
+//                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"), delta);
+//            }
+//
+//            // draw player field
+//            for (Card card : cardBattleGame.get(CardBattleQuest.PLAYER_FIELD).Cards) {
+//                card.render(batch, sr, fonts.get("nameFont"), fonts.get("bodyFont"), delta);
+//            }
+//
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        } finally {
+//            batch.end();
+//            sr.end();
+//        }
+//
+//
     }
 
     @Override
@@ -182,13 +179,20 @@ class GameScreen implements Screen, InputListener {
 
         if (o.getClass() == Card.class) {
             Card c = (Card) o;
-            System.out.println("Got a click on " + c.Architype.name);
+            System.out.println("Got a click on " + c.architype.name);
 
-            if (game.get(CardBattleQuest.PLAYER_HAND).Cards.contains(c)) {
-                game.get(CardBattleQuest.PLAYER_HAND).Cards.remove(c);
-                game.get(CardBattleQuest.PLAYER_FIELD).Cards.add(c);
+            if (cardBattleGame.get(CardBattleQuest.PLAYER_HAND).Cards.contains(c)) {
+                cardBattleGame.get(CardBattleQuest.PLAYER_HAND).Cards.remove(c);
+                cardBattleGame.get(CardBattleQuest.PLAYER_FIELD).Cards.add(c);
+//                c.move_to_x=300;
+//                c.move_to_y=500;
             }
         }
+    }
+
+    @Override
+    public boolean touchUp(int x, int y, int pointer, int button) {
+        return false;
     }
 
     @Override

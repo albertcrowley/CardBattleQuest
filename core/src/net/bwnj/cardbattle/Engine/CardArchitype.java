@@ -4,10 +4,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class CardArchitype {
-    public String name;
-    public Integer cost;
-    public Integer power;
-    public Integer toughness;
+    public String name = "";
+    public Integer cost = 0;
+    public Integer power = 0;
+    public Integer toughness = 0;
     public String suit = "";
     public TextureRegion art;
     public float draw_width = 15F;

@@ -1,11 +1,16 @@
 package net.bwnj.cbq;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 
+import net.bwnj.cardbattle.Engine.CardBattleGame;
 import net.bwnj.cardbattle.Engine.DeckBuilder;
 import net.bwnj.cardbattle.Engine.Location;
 import net.bwnj.cardbattle.Engine.Pile;
+import net.bwnj.cbq.screens.GameScreen;
+import net.bwnj.cbq.screens.SplashScreen;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,7 +20,7 @@ public class CardBattleQuest extends Game {
 
 	GameScreen gameScreen;
 	BattleInputProcessor inputProcessor;
-	net.bwnj.cardbattle.Engine.Game game;
+	public CardBattleGame cardBattleGame;
 
 	public static final String PLAYER_HAND = "playerHand";
 	public static final String MONSTER_HAND = "playerHand";
@@ -24,12 +29,32 @@ public class CardBattleQuest extends Game {
 	public static final String MONSTER_DECK = "monsterDeck";
 	public static final String PLAYER_DECK = "playerDeck";
 
+	public final int WORLD_WIDTH = 720;
+	public final int WORLD_HEIGHT = 1280;
+
+	public Camera camera;
+
+	private Screen currentScreen;
+
 	@Override
 	public void create() {
 
 		// someday a menu here
+		camera = new OrthographicCamera();
 
+		SplashScreen splash = new SplashScreen(this);
+		currentScreen = splash;
+		setScreen(splash);
+
+	}
+
+	public void startNewGame() {
 		startBattle();
+		currentScreen.dispose();
+		GameScreen gs = new GameScreen(this);
+		currentScreen = gs;
+		gs.initBattle();
+		setScreen(gs);
 
 	}
 
@@ -41,16 +66,8 @@ public class CardBattleQuest extends Game {
 				new Location(PLAYER_HAND, new Pile()),
 				new Location(PLAYER_FIELD, new Pile())});
 
+		cardBattleGame = new CardBattleGame(locations);
 
-		game = new net.bwnj.cardbattle.Engine.Game(locations);
-
-
-		inputProcessor = new BattleInputProcessor();
-		Gdx.input.setInputProcessor(inputProcessor);
-
-		gameScreen = new GameScreen(game, inputProcessor);
-		gameScreen.initBattle();
-		setScreen(gameScreen);
 	}
 
 
@@ -67,6 +84,6 @@ public class CardBattleQuest extends Game {
 
 	@Override
 	public void resize(int width, int height) {
-		gameScreen.resize(width, height);
+		currentScreen.resize(width, height);
 	}
 }

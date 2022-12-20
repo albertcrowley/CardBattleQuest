@@ -1,11 +1,13 @@
 package net.bwnj.cardbattle.Engine;
 
+import net.bwnj.cbq.graphics.Card;
+
 import java.util.List;
 
-public class Game {
+public class CardBattleGame {
     public List<Location> Locations;
 
-    public Game(List<Location> locations) {
+    public CardBattleGame(List<Location> locations) {
         this.Locations = locations;
     }
 
