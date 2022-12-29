@@ -58,5 +58,14 @@ public class CardBattleGame {
 
         return true;
     }
+
+    public boolean moveSpecificCard(Card card, Location source, Location dest) {
+        if (! source.Cards.contains(card)) {
+            return false;
+        }
+        source.Cards.remove(card);
+        dest.Cards.add(card);
+        return true;
+    }
 }
 

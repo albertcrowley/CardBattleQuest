@@ -28,7 +28,6 @@ public class Card extends Image {
     public void draw(Batch batch, float parentAlpha) {
 
         setBounds(getX(), getY(), getWidth(), getHeight());
-        System.out.println("Set bounds to " +getX() + " " + getY() + " " + getWidth() + " " + getHeight());
 
         try {
             batch.draw(architype.frameTexture, getX(), getY(), getHeight() * architype.card_ratio, getHeight());
@@ -40,7 +39,6 @@ public class Card extends Image {
             sr.begin();
             sr.setColor(Color.BLACK);
             sr.rect(getX() + architype.card_art_x * getHeight() ,getY() + architype.card_art_y * getHeight(), architype.card_art_width * getHeight(), architype.card_art_height * getHeight());
-//            sr.rect(getX()  ,getY() , getWidth(), getHeight());
             sr.end();
 
             batch.begin();
