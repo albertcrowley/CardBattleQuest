@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
+import net.bwnj.cardbattle.Engine.CardArchitype;
 import net.bwnj.cardbattle.Engine.Location;
 import net.bwnj.cardbattle.Engine.Pile;
 import net.bwnj.cbq.CardBattleQuest;
@@ -29,7 +30,13 @@ public class GameScreen implements Screen, InputListener {
     SpriteBatch batch = new SpriteBatch();
     ShapeRenderer shapeRenderer = new ShapeRenderer();
 
-    Location playerHand, playerField, monsterHand, mosterField, playerDeck, monsterDeck;
+    Location playerHand, playerField, monsterHand, monserField, playerDeck, monsterDeck;
+
+    enum GState { START, PLAYER_TURN, ENEMY_TURN, GAME_TURN}
+
+    GState gameState = GState.START;
+    float standardCardHeight = 0f;
+    float standardCardWidth = 0f;
 
 
     public GameScreen(CardBattleQuest _cbq) {
@@ -37,11 +44,13 @@ public class GameScreen implements Screen, InputListener {
         cbq = _cbq;
         this.stage = new Stage(new FitViewport(cbq.WORLD_WIDTH, cbq.WORLD_HEIGHT, cbq.camera));
         float w = stage.getWidth();
+        standardCardHeight = stage.getHeight() * .1F;
+        standardCardWidth = standardCardHeight * CardArchitype.card_ratio;
 
         playerHand = cbq.cardBattleGame.getLocationByName(CardBattleQuest.PLAYER_HAND);
         playerField = cbq.cardBattleGame.getLocationByName(CardBattleQuest.PLAYER_FIELD);
         monsterHand = cbq.cardBattleGame.getLocationByName(CardBattleQuest.MONSTER_HAND);
-        mosterField = cbq.cardBattleGame.getLocationByName(CardBattleQuest.MONSTER_FIELD);
+        monserField = cbq.cardBattleGame.getLocationByName(CardBattleQuest.MONSTER_FIELD);
         playerDeck = cbq.cardBattleGame.getLocationByName(CardBattleQuest.PLAYER_DECK);
         monsterDeck  = cbq.cardBattleGame.getLocationByName(CardBattleQuest.MONSTER_DECK);
     }
@@ -53,6 +62,7 @@ public class GameScreen implements Screen, InputListener {
         cbq.cardBattleGame.moveCards(5, CardBattleQuest.PLAYER_DECK, CardBattleQuest.PLAYER_HAND);
         layoutCards();
         Gdx.input.setInputProcessor(stage);
+        gameState = GState.PLAYER_TURN;
     }
 
     @Override
@@ -76,30 +86,53 @@ public class GameScreen implements Screen, InputListener {
         float drawpos_y = 20;
         float i = 0;
         float gutter = 0;
-        Pile playerHandCards = playerHand.Cards;
-        if (playerHandCards.size() > 0) {
-            Card c1 = playerHandCards.get(0);
-            c1.setHeight(stage.getHeight() * .1F);
-            gutter = 1.0F / (playerHandCards.size() + 1) * (stage.getWidth() - playerHandCards.size() * c1.getWidth());
-            for (Card card : playerHandCards) {
-                card.setHeight(stage.getHeight() * .1F);
-                card.setPosition(gutter * (i + 1) + card.getWidth() * i, drawpos_y);
-                addCardToStage(card);
-                i++;
-            }
-        }
+        Card c1 = monsterDeck.Cards.get(0);
 
-        Pile playerFieldCards = playerField.Cards;
-        if (playerFieldCards.size() > 0 ) {
-            drawpos_x = 20;
-            i = 0;
-            Card c1 = playerFieldCards.get(0);
-            c1.setHeight(stage.getHeight() * .1F);
-            gutter = 1.0F / (playerFieldCards.size() + 1) * (stage.getWidth() - playerFieldCards.size() * c1.getWidth());
+        layoutCards(playerHand.Cards, drawpos_y);
 
-            for (Card card : playerFieldCards) {
+//        Pile playerHandCards = playerHand.Cards;
+//        if (playerHandCards.size() > 0) {
+//            Card c1 = playerHandCards.get(0);
+//            c1.setHeight(stage.getHeight() * .1F);
+//            gutter = 1.0F / (playerHandCards.size() + 1) * (stage.getWidth() - playerHandCards.size() * c1.getWidth());
+//            for (Card card : playerHandCards) {
+//                card.setHeight(stage.getHeight() * .1F);
+//                card.setPosition(gutter * (i + 1) + card.getWidth() * i, drawpos_y);
+//                addCardToStage(card);
+//                i++;
+//            }
+//        }
+
+        drawpos_y = drawpos_y + 3f * standardCardHeight;
+        layoutCards(playerField.Cards, drawpos_y );
+//        Pile playerFieldCards = playerField.Cards;
+//        if (playerFieldCards.size() > 0 ) {
+//            drawpos_x = 20;
+//            i = 0;
+//            Card c1 = playerFieldCards.get(0);
+//            c1.setHeight(stage.getHeight() * .1F);
+//            gutter = 1.0F / (playerFieldCards.size() + 1) * (stage.getWidth() - playerFieldCards.size() * c1.getWidth());
+//
+//            for (Card card : playerFieldCards) {
+//                card.setHeight(stage.getHeight() * .1F);
+//                drawpos_y = 20 * 3 + card.getHeight();
+//                card.setPosition(gutter * (i + 1) + card.getWidth() * i, drawpos_y);
+//                addCardToStage(card);
+//                i++;
+//            }
+//        }
+
+        layoutCards(monserField.Cards, 8f * standardCardHeight);
+
+    }
+
+    void layoutCards(Pile pile, float drawpos_y) {
+        if (pile.size() > 0 ) {
+            int i = 0;
+            float gutter = 1.0F / (pile.size() + 1) * (stage.getWidth() - pile.size() * standardCardWidth);
+
+            for (Card card : pile) {
                 card.setHeight(stage.getHeight() * .1F);
-                drawpos_y = 20 * 3 + card.getHeight();
                 card.setPosition(gutter * (i + 1) + card.getWidth() * i, drawpos_y);
                 addCardToStage(card);
                 i++;
@@ -126,9 +159,14 @@ public class GameScreen implements Screen, InputListener {
 
     public void cardClicked(Card card) {
         System.out.println("Card clicked: " + card.toString());
-        if (playerHand.Cards.contains(card)) {
-            cbq.cardBattleGame.moveSpecificCard(card, playerHand, playerField);
-            layoutCards();
+        if (gameState == GState.PLAYER_TURN) {
+            if (playerHand.Cards.contains(card)) {
+                cbq.cardBattleGame.moveSpecificCard(card, playerHand, playerField);
+                layoutCards();
+                gameState = GState.ENEMY_TURN;
+            }
+        } else if (gameState == GState.ENEMY_TURN) {
+
         }
     }
 
@@ -141,10 +179,29 @@ public class GameScreen implements Screen, InputListener {
         shapeRenderer.rect(0,0,stage.getWidth(), stage.getHeight());
         shapeRenderer.end();
 
+        enemyActions();
+        gameActions();
+
+
         stage.act(delta);
         stage.draw();
     }
 
+    public void enemyActions() {
+        if (gameState == GState.ENEMY_TURN) {
+            cbq.cardBattleGame.moveCards(1, monsterDeck.Name, monserField.Name);
+
+            layoutCards();
+            gameState = GState.GAME_TURN;
+
+        }
+    }
+
+    public void gameActions() {
+        if (gameState == GState.GAME_TURN) {
+            gameState = GState.PLAYER_TURN;
+        }
+    }
 
     @Override
     public void resize(int width, int height) {

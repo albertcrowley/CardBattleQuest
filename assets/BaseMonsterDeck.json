@@ -16,6 +16,13 @@
           "power" : 2,
           "toughness": 8,
           "count": 2
+        },
+        {
+          "name": "Giant Dragon",
+          "cost" : 2,
+          "power" : 3,
+          "toughness": 18,
+          "count": 2
         }
       ]
     }

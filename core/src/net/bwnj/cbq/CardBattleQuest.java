@@ -36,21 +36,29 @@ public class CardBattleQuest extends Game {
 
 	private Screen currentScreen;
 
+	boolean testMode = true;
+
 	@Override
 	public void create() {
 
 		// someday a menu here
 		camera = new OrthographicCamera();
 
-		SplashScreen splash = new SplashScreen(this);
-		currentScreen = splash;
-		setScreen(splash);
-
+		// TODO: splash screen removed for testing. Restore this later
+		if (testMode) {
+			startNewGame();
+		} else {
+			SplashScreen splash = new SplashScreen(this);
+			currentScreen = splash;
+			setScreen(splash);
+		}
 	}
 
 	public void startNewGame() {
 		startBattle();
-		currentScreen.dispose();
+		if (currentScreen != null) {
+			currentScreen.dispose();
+		}
 		GameScreen gs = new GameScreen(this);
 		currentScreen = gs;
 		gs.initBattle();
@@ -62,7 +70,8 @@ public class CardBattleQuest extends Game {
 		List<Location> locations = Arrays.asList(new Location[]{
 				new Location(MONSTER_DECK, DeckBuilder.getBaseMonsterDeck()),
 				new Location(MONSTER_FIELD, new Pile()),
-				new Location(PLAYER_DECK, DeckBuilder.getStandardPlayingCardDeck()),
+//				new Location(PLAYER_DECK, DeckBuilder.getStandardPlayingCardDeck()),
+				new Location(PLAYER_DECK, DeckBuilder.getBaseMonsterDeck()),
 				new Location(PLAYER_HAND, new Pile()),
 				new Location(PLAYER_FIELD, new Pile())});
 
